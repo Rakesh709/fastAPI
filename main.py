@@ -1,4 +1,3 @@
-# main.py
 
 from fastapi import FastAPI, HTTPException, Depends,status
 from pydantic import BaseModel
@@ -6,9 +5,6 @@ from typing import Annotated
 import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
-
-
-
 
 
 app = FastAPI()
@@ -56,7 +52,7 @@ db_dependency = Annotated[Session,Depends(get_db)]
 async def read_products(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     products = db.query(models.Product).offset(skip).limit(limit).all()
     if products is None:
-        raise HTTPException(status_code=404,detail='No Products not available')
+        raise HTTPException(status_code=404,detail='No Products available')
     return products
 
 @app.get("/products/{product_id}", status_code=status.HTTP_200_OK)
@@ -85,11 +81,11 @@ async def update_product(product_id: int, product: ProductUpdate, db: Session = 
     db.refresh(db_product_update)
     return db_product_update
 
-# @app.delete("/products/{product_id}")
-# def delete_product(product_id: int, db: Session = Depends(get_db)):
-#     db_product = db.query(models.Product).filter(models.Product.id == product_id).first()
-#     if db_product is None:
-#         raise HTTPException(status_code=404, detail="Product not found")
-#     db.delete(db_product)
-#     db.commit()
-#     return {"message": "Product deleted successfully"}
+@app.delete("/products/{product_id}")
+async def delete_product(product_id: int, db: Session = Depends(get_db)):
+    db_product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if db_product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    db.delete(db_product)
+    db.commit()
+    return {"message": "Product deleted successfully"}
