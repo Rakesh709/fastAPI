@@ -55,10 +55,6 @@ async def user (user: None, db: db_dependency):
 
 
 
-
-
-
-
 #To Retrieve a list of all products from a database.
 @app.get("/products/", status_code=status.HTTP_200_OK)
 async def read_products(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
