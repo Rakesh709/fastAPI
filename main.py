@@ -37,6 +37,13 @@ class ProductUpdate(BaseModel):
     price: float 
 
 
+class user(BaseModel):
+    username:str
+    password:str
+    email :str
+
+
+
 # CRUD Operations
 def get_db():
     db = SessionLocal()

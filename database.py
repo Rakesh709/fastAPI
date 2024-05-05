@@ -6,14 +6,20 @@ from sqlalchemy.ext.declarative import declarative_base
 
 
 
-
+# Database URL for products
 URL_DATABASE = "mysql+mysqlconnector://root:root@localhost:3306/products"
 
-SQLALCHEMY_DATABASE_URL = 'sqlite:///./todosapp.db'
+# Database URL for JWT authentication
+USERS_DATABASE_URL = 'mysql+mysqlconnector://root:root@localhost:3306/users'
 
 engine = create_engine(URL_DATABASE)
-engine2 = create_engine(SQLALCHEMY_DATABASE_URL,connect_args={'check_same_thread':False})
+
+auth_engine = create_engine(USERS_DATABASE_URL)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+AuthSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=auth_engine)
 
 Base = declarative_base()
+
+AuthBase = declarative_base()
