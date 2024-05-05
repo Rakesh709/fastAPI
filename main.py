@@ -47,6 +47,17 @@ def get_db():
 
 db_dependency = Annotated[Session,Depends(get_db)]
 
+@app.get( "/" , status_code=status.HTTP_200_OK)
+async def user (user: None, db: db_dependency):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+    return {"User": user}
+
+
+
+
+
+
 
 #To Retrieve a list of all products from a database.
 @app.get("/products/", status_code=status.HTTP_200_OK)
